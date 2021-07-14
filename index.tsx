@@ -5,7 +5,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FlatList } from 'react-native-gesture-handler';
 
-import { colors } from './Globals'
+import { colors, icons } from './Globals'
 
 const renderApp = (navigation, item) => {
   return (
@@ -48,14 +48,20 @@ const screens = [
   {
     id: 0,
     goto: 'GraphQL',
-    icon: 'codesquareo',
+    icon: icons.cli,
     text: 'Go to my GraphQL test !'
   },
   {
     id: 1,
     goto: 'UseEffect',
-    icon: 'swap',
+    icon: icons.swap,
     text: 'Go check my UseEffect test !'
+  },
+  {
+    id: 2,
+    goto: 'Login',
+    icon: icons.close,
+    text: 'Let\'s make our first query !'
   }
 ];
 

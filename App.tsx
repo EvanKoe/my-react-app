@@ -7,11 +7,14 @@ import { createStackNavigator } from '@react-navigation/stack';
 //screens
 import UseEffect from './screens/useEffect';
 import GraphQL from './screens/graphql';
+import Login from './screens/login';
 import Index from './index';
 
 //globals
-import { colors, client } from './Globals';
+import { colors, client, icons } from './Globals';
 import { ApolloProvider } from '@apollo/client';
+
+import { ApolloClient, InMemoryCache } from "@apollo/client";
 
 const Stack = createStackNavigator();
 
@@ -31,6 +34,10 @@ const App = () => {
           <Stack.Screen
             name="GraphQL"
             component={GraphQL}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="Login"
+            component={Login}
           ></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
@@ -56,4 +63,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default Main;

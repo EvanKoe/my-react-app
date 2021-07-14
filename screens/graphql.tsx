@@ -15,18 +15,24 @@ const GraphQL = ({ navigation }: any) => {
   const [srch, setSrch] = useState('');
 
   const QUERY = gql`
-    query GetRates {
-      rates(currency: "USD") {
-        currency
+    query getUsers {
+      users {
+        list (first: 20) {
+          data {
+            edges {
+              node {
+                email
+              }
+            }
+          }
+        }
       }
-    }
-  `;
+    }`;
 
   const renderItem = (eachOne: any) => {
-    console.log('test : ' + eachOne.name)
     return (
       <View style={styles.renderItem}>
-        <Text style={{ fontSize: 20, color: colors.primary }}> { eachOne.currency } </Text>
+        <Text style={{ fontSize: 20, color: colors.primary }}> { eachOne.name } </Text>
       </View>
     );
   }
@@ -35,27 +41,31 @@ const GraphQL = ({ navigation }: any) => {
     const { loading, error, data } = useQuery(QUERY);
 
     if (error)
-      return <Text> {"Error :("} </Text>
+      return <Text> { "Error :(" } </Text>
     if (loading)
       return <Text> Loading content ... </Text>
 
     return (
       <FlatList
-        data={data.rates}
-        renderItem={(eachOne) => renderItem(eachOne.item)}
-        keyExtractor={(eachOne) => eachOne.currency.toString()}
+        scrollEnabled={true}
+        data={data.users.data}
+        renderItem={(eachOne) => {
+          console.log(eachOne);
+          return renderItem(eachOne.item);
+        }}
+        keyExtractor={(eachOne) => eachOne.id.toString()}
       />
     )
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       <View>
         <Text style={styles.title}> Bonjour GraphQL ! </Text>
       </View>
-      <ApolloProvider client={client}>
+      <View style={{ flex: 1 }}>
         <ExchangeRate />
-      </ApolloProvider>
+      </View>
     </SafeAreaView>
   );
 };
