@@ -10,13 +10,6 @@ export const colors = {
   primaryDark: '#b03'
 };
 
-export const client = new ApolloClient({
-//uri: 'https://48p1r2roz4.sse.codesandbox.io',
-//uri: 'https://graphqlzero.almansi.me/api',
-  uri: 'https://www.dev.yabe.co/graphql',
-  cache: new InMemoryCache()
-});
-
 export const icons = {
   close: 'close',
   swap: 'swap',

@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   StyleSheet
 } from 'react-native';
-import { colors, client, icons } from '../Globals';
+import { colors, icons } from '../Globals';
 import { gql, useMutation } from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -28,20 +28,21 @@ const MUT = gql`
   }
 `;
 
-const Login = ({ navigator }) => {
+const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPswd] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [login] = useMutation(MUT, { variables: { email, password } });
 
   const makeQuery = async () => {
+    if (email)
     setErrorMsg('Loading, please wait ...')
     const {data, loading, error} = await login({
       variables : {
         email: email.toLowerCase(),
         password: password
       }
-    })
+    });
 
     console.log({data}.data.session.logIn.result.token);
 
@@ -51,9 +52,10 @@ const Login = ({ navigator }) => {
     }
     const token = await AsyncStorage.setItem(
       'auth',
-      {data}.data.session.logIn.result.token
+      {data}.data.session.logIn.result.token.toString()
     );
-    return setErrorMsg('Logged in !')
+    setErrorMsg('Logged in !')
+    navigation.navigate('Index')
   }
 
   return (

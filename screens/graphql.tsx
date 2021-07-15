@@ -4,15 +4,17 @@ import React, { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View, FlatList, StyleSheet } from "react-native";
 import { TextInput } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors, client, icons } from "../Globals";
+import { colors, icons } from "../Globals";
 
 //icons
 import { AntDesign } from '@expo/vector-icons';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const GraphQL = ({ navigation }: any) => {
   const [tab, setTab] = useState([]);
   const [srch, setSrch] = useState('');
+  const [token, setToken] = useState('');
 
   const QUERY = gql`
     query getUsers {
@@ -20,9 +22,7 @@ const GraphQL = ({ navigation }: any) => {
         list (first: 20) {
           data {
             edges {
-              node {
-                email
-              }
+              node {email}
             }
           }
         }
@@ -32,12 +32,14 @@ const GraphQL = ({ navigation }: any) => {
   const renderItem = (eachOne: any) => {
     return (
       <View style={styles.renderItem}>
-        <Text style={{ fontSize: 20, color: colors.primary }}> { eachOne.name } </Text>
+        <Text style={{ fontSize: 20, color: colors.primary }}> { eachOne.node.email } </Text>
       </View>
     );
   }
 
-  const ExchangeRate = () => {
+  const Query = () => {
+    if (token === '' || token === undefined)
+      return <Text> Please log in </Text>
     const { loading, error, data } = useQuery(QUERY);
 
     if (error)
@@ -45,18 +47,24 @@ const GraphQL = ({ navigation }: any) => {
     if (loading)
       return <Text> Loading content ... </Text>
 
+    const userList = data.users.list.data.edges;
+
     return (
       <FlatList
         scrollEnabled={true}
-        data={data.users.data}
-        renderItem={(eachOne) => {
-          console.log(eachOne);
-          return renderItem(eachOne.item);
-        }}
-        keyExtractor={(eachOne) => eachOne.id.toString()}
+        data={userList}
+        renderItem={(eachOne) => renderItem(eachOne.item)}
+        keyExtractor={(eachOne) => eachOne.node.email.toString()}
       />
     )
   }
+
+  useEffect(() => {
+    const getToken = async () => {
+      return await AsyncStorage.getItem('auth');
+    };
+    setToken(getToken().toString());
+  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -64,7 +72,7 @@ const GraphQL = ({ navigation }: any) => {
         <Text style={styles.title}> Bonjour GraphQL ! </Text>
       </View>
       <View style={{ flex: 1 }}>
-        <ExchangeRate />
+        <Query />
       </View>
     </SafeAreaView>
   );

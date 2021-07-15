@@ -11,10 +11,12 @@ import Login from './screens/login';
 import Index from './index';
 
 //globals
-import { colors, client, icons } from './Globals';
-import { ApolloProvider } from '@apollo/client';
+import { colors, icons } from './Globals';
 
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+//authorization
+import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setContext } from '@apollo/client/link/context';
 
 const Stack = createStackNavigator();
 
@@ -23,6 +25,10 @@ const App = () => {
     <View style={styles.container}>
       <NavigationContainer>
         <Stack.Navigator>
+        <Stack.Screen
+            name="Login"
+            component={Login}
+          ></Stack.Screen>
           <Stack.Screen
             name="Index"
             component={Index}
@@ -35,17 +41,56 @@ const App = () => {
             name="GraphQL"
             component={GraphQL}
           ></Stack.Screen>
-          <Stack.Screen
-            name="Login"
-            component={Login}
-          ></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
     </View>
   );
 };
 
-const Main = () => {
+const Main = ({ navigation }) => {
+  const [client, setClient] = useState({});
+  /*const client = new ApolloClient({
+    uri:  'https://www.dev.yabe.co/graphql',
+    cache: new InMemoryCache()
+  });*/
+
+  useEffect(() => {
+    const getAuthToken = async () => {
+      return await AsyncStorage.getItem('auth');
+    };
+
+    const setAuthLink = setContext(async (req, context) => {
+      const token = await AsyncStorage.getItem('auth');
+      return {
+        headers: {
+          ...context.headers,
+          authorization: `Bearer ${token}`
+        }
+      };
+    });
+
+    let token = getAuthToken();
+    const link = new HttpLink({
+      uri: 'https://www.dev.yabe.co/graphql',
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!token) {
+      navigation.navigate('Login');
+      setClient(new ApolloClient({
+        uri:  'https://www.dev.yabe.co/graphql',
+        cache: new InMemoryCache()
+      }));
+    } else {
+      setClient(new ApolloClient({
+        link:  setAuthLink.concat(link),
+        cache: new InMemoryCache()
+      }));
+    }
+  }, []);
+
   return (
     <ApolloProvider client={client}>
       <App />

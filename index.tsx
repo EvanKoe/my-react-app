@@ -57,12 +57,12 @@ const screens = [
     icon: icons.swap,
     text: 'Go check my UseEffect test !'
   },
-  {
+  /*{
     id: 2,
-    goto: 'Login',
+    goto: 'Logout',
     icon: icons.close,
     text: 'Let\'s make our first query !'
-  }
+  }*/
 ];
 
 export default Index;
