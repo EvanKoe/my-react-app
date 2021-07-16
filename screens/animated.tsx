@@ -1,8 +1,10 @@
 import React from 'react';
 import { Text, TouchableOpacity, Animated } from 'react-native';
 
-const Anime = ({ navigation }) = {
+const Anime = ({ navigation }) => {
   return (
-    <Text> Pute </Text>
+    <Text> Animated </Text>
   )
 }
+
+export default Anime;

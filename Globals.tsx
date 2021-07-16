@@ -13,5 +13,6 @@ export const colors = {
 export const icons = {
   close: 'close',
   swap: 'swap',
-  cli: 'codesquareo'
+  cli: 'codesquareo',
+  pic: 'picture'
 };

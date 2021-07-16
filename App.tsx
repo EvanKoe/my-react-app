@@ -9,6 +9,7 @@ import UseEffect from './screens/useEffect';
 import GraphQL from './screens/graphql';
 import Login from './screens/login';
 import Index from './index';
+import Anime from './screens/animated';
 
 //globals
 import { colors, icons } from './Globals';
@@ -40,6 +41,10 @@ const App = () => {
           <Stack.Screen
             name="GraphQL"
             component={GraphQL}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="Anime"
+            component={Anime}
           ></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
