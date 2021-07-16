@@ -22,7 +22,7 @@ const GraphQL = ({ navigation }: any) => {
         list (first: 20) {
           data {
             edges {
-              node {email}
+              node {email, firstname}
             }
           }
         }
@@ -30,9 +30,12 @@ const GraphQL = ({ navigation }: any) => {
     }`;
 
   const renderItem = (eachOne: any) => {
+    const name = eachOne.node.firstname;
+    const formatedName = name[0].toUpperCase() + name.replace(name[0], '').toLowerCase();
     return (
       <View style={styles.renderItem}>
-        <Text style={{ fontSize: 20, color: colors.primary }}> { eachOne.node.email } </Text>
+        <Text style={{ fontSize: 20, color: colors.primary }}> { formatedName } </Text>
+        <Text style={{ fontSize: 14 }}> { eachOne.node.email } </Text>
       </View>
     );
   }

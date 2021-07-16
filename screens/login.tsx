@@ -35,7 +35,8 @@ const Login = ({ navigation }) => {
   const [login] = useMutation(MUT, { variables: { email, password } });
 
   const makeQuery = async () => {
-    if (email)
+    if (!email || !password)
+      return setErrorMsg('Please fill all fields')
     setErrorMsg('Loading, please wait ...')
     const {data, loading, error} = await login({
       variables : {
@@ -44,12 +45,11 @@ const Login = ({ navigation }) => {
       }
     });
 
-    console.log({data}.data.session.logIn.result.token);
-
     if (error) {
       setErrorMsg('Error');
       throw error;
-    }
+    } else if ({data}.data.session.logIn.result === null)
+      return setErrorMsg('Wrong credentials');
     const token = await AsyncStorage.setItem(
       'auth',
       {data}.data.session.logIn.result.token.toString()
@@ -79,7 +79,7 @@ const Login = ({ navigation }) => {
       >
         <Text style={{ color: colors.white, fontSize: 20 }}> Log in </Text>
       </TouchableOpacity>
-      <Text> { errorMsg } </Text>
+      <Text style={styles.errorMsg}> { errorMsg } </Text>
     </SafeAreaView>
   )
 }
@@ -110,6 +110,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginHorizontal: 10,
     marginBottom: 30
+  },
+  errorMsg: {
+    color: colors.primary,
+    fontWeight: 'bold',
+    fontSize: 20,
+    alignSelf: 'center',
+    marginTop: 30,
+    marginHorizontal: 20,
   }
 });
 
