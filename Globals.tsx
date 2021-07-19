@@ -1,4 +1,4 @@
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { Dimensions } from "react-native";
 
 export const colors = {
   primary: '#d25',
@@ -15,4 +15,9 @@ export const icons = {
   swap: 'swap',
   cli: 'codesquareo',
   pic: 'picture'
+};
+
+export const screen = {
+  width: Dimensions.get('window').width,
+  height: Dimensions.get('window').height
 };

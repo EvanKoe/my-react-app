@@ -1,11 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Text, TouchableOpacity, StyleSheet, Image, Dimensions, View } from 'react-native';
+import { Text, TouchableOpacity, StyleSheet, Image, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors } from '../Globals'
-
-const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
+import { colors, screen } from '../Globals'
 
 const UseEffect = ({ navigation }) => {
   const [source, setSource] = useState('https://images.dog.ceo/breeds/sheepdog-english/n02105641_8760.jpg');
@@ -47,8 +44,8 @@ const styles = StyleSheet.create({
     color: colors.primary
   },
   image: {
-    width: width - 20,
-    height: height / 2,
+    width: screen.width - 20,
+    height: screen.height / 2,
     marginHorizontal: 10,
     borderRadius: 15
   },
