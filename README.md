@@ -26,5 +26,4 @@ The useEffect page uses the useEffect() hook to fetch the Dog Pictures API. It w
 
 # Anime
 
-The Anime page is a playground to learn animations from the 'Animated' library (from 'react-native' package). It is curretly under development.
-
+The Anime page is for me a playground to learn animations from the 'Animated' library (from 'react-native' package). It is curretly under development.
