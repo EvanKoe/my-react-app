@@ -7,8 +7,10 @@ import {
   StyleSheet,
   View,
   FlatList,
-  Image
+  Image,
+  ImageStore
 } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { call } from 'react-native-reanimated';
 
 import { colors, screen } from '../Globals';
@@ -17,7 +19,8 @@ const Anime = ({ navigation }) => {
   const api = 'https://dog.ceo/api/breeds/image/random/10';
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const [images, setImages] = useState([]);
-  const [currImage, setCurrImage] = useState('');
+  const [currImage, setCurrImage] = useState();
+  let myFlatList = useRef(null);
 
   const fade_fun = (opacity, long, callback) => {
     Animated.timing(fadeAnim, {
@@ -35,12 +38,12 @@ const Anime = ({ navigation }) => {
       <TouchableOpacity
         onPress={() => {
           fade_fun(0, 100, () => {
-            setCurrImage(item.toString());
+            myFlatList.scrollToIndex({index: item.index, animated: true});
             fade_fun(1, 100, undefined);
           });
         }}
       >
-        <Image source={{uri: item.toString()}} style={styles.carouselPic}/>
+        <Image source={{uri: item.item.toString()}} style={styles.carouselPic}/>
       </TouchableOpacity>
     );
   }
@@ -51,32 +54,29 @@ const Anime = ({ navigation }) => {
     .then((response) => response.json())
     .then((data) => {
       setImages(data.message);
-      setCurrImage(data.message[0]);
     })
   }, [])
 
   return (
     <SafeAreaView style={{ backgroundColor: colors.dark, flex: 1 }}>
-      {/*<View>
-        <Animated.View style={[styles.mainView, { opacity: fadeAnim }]}>
-          <Text style={styles.mainTitle}> Animated </Text>
-        </Animated.View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => fade_fun(isDisplayed ? 'o' : 'i')}
+      <Animated.View style={[styles.animatedView, {opacity: fadeAnim}]}>
+        <FlatList
+          ref={(ref) => (myFlatList = ref)}
+          scrollEnabled={true}
+          horizontal={true}
+          data={images}
+          renderItem={(item) => <Image source={{ uri: item.item }} style={styles.mainPic}/>}
+          initialScrollIndex={0}
+          keyExtractor={(item) => (item.index)}
         >
-          <Text style={{ color: '#fff' }}> Fade { isDisplayed ? 'out' : 'in' } </Text>
-        </TouchableOpacity>
-      </View>*/}
-      <Animated.View style={[styles.animatedView, { opacity: fadeAnim }]}>
-        <Image source={{ uri: currImage }} style={styles.mainPic}/>
+        </FlatList>
       </Animated.View>
       <FlatList
         style={styles.carousel}
         horizontal={true}
         scrollEnabled={true}
         data={images}
-        renderItem={(item) => carousel(item.item)}
+        renderItem={(item) => carousel(item)}
         keyExtractor={(item) => item.toString()}
       />
     </SafeAreaView>
@@ -87,8 +87,8 @@ export default Anime;
 
 const styles = StyleSheet.create({
   animatedView: {
-    width: screen.width,
-    paddingTop: 100
+    paddingTop: 100,
+    flexDirection: 'row'
   },
   button: {
     backgroundColor: colors.primary,
