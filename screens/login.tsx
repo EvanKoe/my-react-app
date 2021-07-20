@@ -50,7 +50,7 @@ const Login = ({ navigation }) => {
       throw error;
     } else if ({data}.data.session.logIn.result === null)
       return setErrorMsg('Wrong credentials');
-    const token = await AsyncStorage.setItem(
+    await AsyncStorage.setItem(
       'auth',
       {data}.data.session.logIn.result.token.toString()
     );

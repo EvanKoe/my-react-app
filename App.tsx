@@ -15,37 +15,45 @@ import Anime from './screens/animated';
 import { colors, icons } from './Globals';
 
 //authorization
-import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
+import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink, makeVar, useReactiveVar } from "@apollo/client";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setContext } from '@apollo/client/link/context';
 
 const Stack = createStackNavigator();
+export const toggleCurrentUser = makeVar(false);
 
 const App = () => {
+  const currentUser = useReactiveVar(toggleCurrentUser);
+
   return (
     <View style={styles.container}>
       <NavigationContainer>
         <Stack.Navigator>
-        <Stack.Screen
+          {!currentUser ? (
+          <Stack.Screen
             name="Login"
             component={Login}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="Index"
-            component={Index}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="UseEffect"
-            component={UseEffect}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="GraphQL"
-            component={GraphQL}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="Anime"
-            component={Anime}
-          ></Stack.Screen>
+          />
+          ) : (
+          <>
+            <Stack.Screen
+              name="Index"
+              component={Index}
+            />
+            <Stack.Screen
+              name="UseEffect"
+              component={UseEffect}
+            />
+            <Stack.Screen
+              name="GraphQL"
+              component={GraphQL}
+            />
+            <Stack.Screen
+              name="Anime"
+              component={Anime}
+            />
+          </>
+          )}
         </Stack.Navigator>
       </NavigationContainer>
     </View>
@@ -54,10 +62,7 @@ const App = () => {
 
 const Main = ({ navigation }) => {
   const [client, setClient] = useState({});
-  /*const client = new ApolloClient({
-    uri:  'https://www.dev.yabe.co/graphql',
-    cache: new InMemoryCache()
-  });*/
+  const currentUser = useReactiveVar(toggleCurrentUser);
 
   useEffect(() => {
     const getAuthToken = async () => {
@@ -79,16 +84,17 @@ const Main = ({ navigation }) => {
       uri: 'https://www.dev.yabe.co/graphql',
       headers: {
         authorization: `Bearer ${token}`,
-      },
+      }
     });
 
     if (!token) {
-      navigation.navigate('Login');
+      toggleCurrentUser(false);
       setClient(new ApolloClient({
         uri:  'https://www.dev.yabe.co/graphql',
         cache: new InMemoryCache()
       }));
     } else {
+      toggleCurrentUser(true);
       setClient(new ApolloClient({
         link:  setAuthLink.concat(link),
         cache: new InMemoryCache()

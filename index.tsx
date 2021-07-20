@@ -8,6 +8,9 @@ import { FlatList } from 'react-native-gesture-handler';
 import { colors, icons } from './Globals'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { color } from 'react-native-reanimated';
+import { useReactiveVar } from '@apollo/client';
+
+import { toggleCurrentUser } from './App';
 
 const renderApp = (navigation, item) => {
   return (
@@ -44,6 +47,7 @@ const logout = async ({ navigation }) => {
         ToastAndroid.LONG,
         ToastAndroid.CENTER
       );
+      toggleCurrentUser(false);
       return navigation.navigate('Login');
     }
   })
