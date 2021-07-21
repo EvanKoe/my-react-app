@@ -14,7 +14,8 @@ export const icons = {
   close: 'close',
   swap: 'swap',
   cli: 'codesquareo',
-  pic: 'picture'
+  pic: 'picture',
+  win: 'windows'
 };
 
 export const screen = {

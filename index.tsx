@@ -101,6 +101,12 @@ const screens = [
     goto: 'Anime',
     icon: icons.pic,
     text: 'Let\'s make our first query !'
+  },
+  {
+    id: 3,
+    goto: 'Design',
+    icon: icons.win,
+    text: 'Trying to make awesome designs !'
   }
 ];
 

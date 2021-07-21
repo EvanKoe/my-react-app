@@ -109,7 +109,8 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: 'bold',
     marginHorizontal: 10,
-    marginBottom: 30
+    marginBottom: 30,
+    marginTop: 50
   },
   errorMsg: {
     color: colors.primary,
