@@ -22,6 +22,7 @@ const Anime = ({ navigation }) => {
   let myMainList = useRef(null);
   let myCarousel = useRef(null);
   const [changeIndex, setChangeIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0)
 
   const viewabilityConfig = {
     waitForInteraction: true,
@@ -29,11 +30,8 @@ const Anime = ({ navigation }) => {
   };
 
   const _onViewableItemsChanged = useCallback(({viewabilityItems, changed}) => {
-    if (myCarousel)
-      myCarousel.scrollToIndex({index: changed[0].index, animated: true});
-    else
-      console.log(myCarousel);
-  }, [myCarousel]);
+    setCurrentIndex(changed[0].index);
+  }, []);
 
   const fade_fun = (opacity, long, callback) => {
     Animated.timing(fadeAnim, {
@@ -41,8 +39,7 @@ const Anime = ({ navigation }) => {
       duration: long,
       useNativeDriver: true
     }).start(() => {
-      if (callback)
-        return callback()
+      return callback ? callback() : null;
     });
   }
 
@@ -50,6 +47,11 @@ const Anime = ({ navigation }) => {
     return (
       <TouchableOpacity
         onPress={() => myMainList.scrollToIndex({index: item.index, animated: true})}
+        style={{
+          paddingVertical: 5,
+          backgroundColor: (item.index === currentIndex ? colors.primary : colors.dark),
+          borderRadius: 15
+        }}
       >
         <Image source={{uri: item.item.toString()}} style={styles.carouselPic}/>
       </TouchableOpacity>
@@ -68,17 +70,15 @@ const Anime = ({ navigation }) => {
   return (
     <SafeAreaView style={{ backgroundColor: colors.dark, flex: 1 }}>
       <Animated.View
-        style={[styles.animatedView, {
-          opacity: fadeAnim,
-          width: screen.width
-        }]}
+        style={[styles.animatedView, { width: screen.width }]}
       >
         <FlatList
           viewabilityConfig={viewabilityConfig}
           onViewableItemsChanged={_onViewableItemsChanged}
           pagingEnabled={true}
+          onScroll={() => myCarousel?.scrollToIndex({index: currentIndex, animated: true})}
           ref={(ref) => (myMainList = ref)}
-          scrollEnabled={true}
+          scrollEnabled={true}é
           horizontal={true}
           data={images}
           renderItem={(item) => <Image source={{ uri: item.item }} style={styles.mainPic}/>}
@@ -87,7 +87,7 @@ const Anime = ({ navigation }) => {
         >
         </FlatList>
       </Animated.View>
-      <Animated.View>
+      <Animated.View style={{ opacity: fadeAnim }}>
         <FlatList
           pagingEnabled={true}
           initialScrollIndex={0}
