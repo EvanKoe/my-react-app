@@ -3,7 +3,8 @@ import { Text, SafeAreaView, StyleSheet, View, ToastAndroid } from 'react-native
 import { colors, icons } from '../Globals';
 import { Clickable } from '../Components/bottomNavBar';
 
-import {LinearGradient} from 'expo-linear-gradient';
+import { LinearGradient } from 'expo-linear-gradient';
+import { printIntrospectionSchema } from 'graphql';
 
 const Design = ({ navigator }) => {
   return (
@@ -19,31 +20,9 @@ const Design = ({ navigator }) => {
           <Text style={{color: colors.white}}> Disabled : </Text>
           <Clickable disabled />
           <Text style={{color: colors.white}}> Empty : </Text>
-          <Clickable />
+          <Clickable icon={icons.pic} />
         </LinearGradient>
       </View>
-      {/*<Clickable
-        text='Click here'
-        textStyle={{
-          color: colors.white,
-          fontWeight: 'bold',
-          fontSize: 30,
-        }}
-        icon={{
-          name: icons.win,
-          size: 30,
-          color: colors.white
-        }}
-        iconStyle={{ marginVertical: 20 }}
-        style={{ backgroundColor: colors.dark }}
-        callback={() => {
-          ToastAndroid.showWithGravity(
-            "You clicked an element !",
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER
-          );
-        }}
-      />*/}
     </>
   );
 };

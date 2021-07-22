@@ -24,6 +24,8 @@ interface Props {
   iconStyle?: StyleProp<ViewStyle>;
   style?: StyleProp<ViewStyle>;
   icon?: any;
+  iconSize?: number;
+  iconColor?: string;
   text?: string;
 }
 
@@ -35,19 +37,17 @@ export const Clickable: FC<Props> = ({
   textStyle = {},
   iconStyle = {},
   style = {},
-  icon = {
-    name: 'codesquareo',
-    size: 24,
-    color: 'empty'
-  },
+  icon = 'codesquareo',
+  iconSize = 24,
+  iconColor = 'empty',
   text = 'Click here',
 }) => {
-  const [iconColor, setIconColor] = useState('');
+  const [iconFColor, setIconColor] = useState('');
 
   useEffect(() => {
     setIconColor(colors.black);
-    if (icon.color !== 'empty')
-      setIconColor(icon.color);
+    if (iconColor !== 'empty')
+      setIconColor(iconColor);
     else {
       if (primary)
         setIconColor(colors.white);
@@ -76,9 +76,9 @@ export const Clickable: FC<Props> = ({
         alignSelf: 'center'
       }}>
         <AntDesign
-          name={icon?.name}
-          size={icon?.size}
-          color={iconColor}
+          name={icon}
+          size={iconSize}
+          color={iconFColor}
           style={[
             iconStyle,
             styles.textStyle,
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   },
   secondary: {
     backgroundColor: colors.lightGrey,
-    borderColor: colors.primary,
+    borderColor: colors.primaryDark,
     borderWidth: 2
   },
   secondaryText: {
